@@ -1,4 +1,4 @@
-# Mapa BH
+# GPX BH
 Ferramenta para gerar GPX de bairros de Belo Horizonte.
 
 ![](assets/bairros.png)
@@ -6,7 +6,7 @@ Ferramenta para gerar GPX de bairros de Belo Horizonte.
 ## Versão web (recomendada)
 App estático (web/mobile) hospedado no GitHub Pages — sem instalação:
 
-**https://marcelochaves95.github.io/mapa-bh**
+**https://marcelochaves95.github.io/gpx-bh**
 
 Escolha um bairro, visualize o limite no mapa, baixe o `.gpx` ou abra direto no
 gpx.studio. Em tempo de execução o site é 100% estático — não depende da API da PBH.
@@ -41,8 +41,8 @@ cd docs && python -m http.server 8000
 ### Instalação
 1. Clone o repositório:
 ```
-git clone https://github.com/marcelochaves95/mapa-bh.git
-cd mapa-bh
+git clone https://github.com/marcelochaves95/gpx-bh.git
+cd gpx-bh
 ```
 2. Instale as dependências necessárias:
 ```

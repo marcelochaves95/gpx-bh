@@ -181,3 +181,11 @@ footer {
 }
 
 footer a { color: var(--muted); }
+
+footer .github-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+footer .github-link:hover { color: var(--text); }

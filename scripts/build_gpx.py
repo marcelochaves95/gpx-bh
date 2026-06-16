@@ -32,7 +32,7 @@ def build_gpx(name, polygons):
     safe = escape(name)
     parts = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<gpx version="1.1" creator="Mapa BH" xmlns="http://www.topografix.com/GPX/1/1">',
+        '<gpx version="1.1" creator="GPX BH" xmlns="http://www.topografix.com/GPX/1/1">',
         "  <trk>",
         f"    <name>{safe}</name>",
         "    <trkseg>",

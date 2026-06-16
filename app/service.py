@@ -48,7 +48,7 @@ def fetch_neighborhoods():
     return dict(sorted(neighborhoods.items()))
 
 def generate_gpx(selected_neighborhood, coordinates, file_path, elevation=1045.55):
-    gpx = ET.Element("gpx", version="1.1", creator="Mapa BH", xmlns="http://www.topografix.com/GPX/1/1")
+    gpx = ET.Element("gpx", version="1.1", creator="GPX BH", xmlns="http://www.topografix.com/GPX/1/1")
     trk = ET.SubElement(gpx, "trk")
     ET.SubElement(trk, "name").text = selected_neighborhood
     trkseg = ET.SubElement(trk, "trkseg")
