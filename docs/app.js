@@ -200,11 +200,15 @@ function openInGpxStudio() {
   window.open(`https://gpx.studio/app?files=${files}`, "gpxstudio");
 }
 
-// Strava has no API/deep-link to receive a GPX from a static site, so this opens
-// the route builder for the user to upload the downloaded GPX manually (a paid
-// Strava feature). Reuses the same tab via a named target.
+// Strava has no API/deep-link to receive a GPX from a static site, so we download
+// the file first (otherwise the user would land on the route builder with nothing
+// to upload) and open the builder for a manual upload. Reuses the tab via a named
+// target.
 function openStrava() {
+  if (!current) return;
+  downloadGpx();
   window.open("https://www.strava.com/routes/new", "strava");
+  setStatus(`GPX de ${current} baixado. No Strava, clique em "Carregar GPX" e depois em "Escolher arquivo" para enviá-lo e criar a rota.`, "ok");
 }
 
 // --- Data loading ---
