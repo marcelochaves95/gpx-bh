@@ -8,19 +8,33 @@ App estático (web/mobile) hospedado no GitHub Pages — sem instalação:
 
 **https://marcelochaves95.github.io/mapa-bh**
 
-Escolha um bairro, visualize o limite no mapa e baixe o `.gpx` direto no navegador.
-Os dados ficam pré-processados em `docs/data/bairros.json` (limites convertidos de
-UTM para lat/lon), então o site não depende da API da PBH em tempo de execução.
+Escolha um bairro, visualize o limite no mapa, baixe o `.gpx` ou abra direto no
+gpx.studio. Em tempo de execução o site é 100% estático — não depende da API da PBH.
 
-### Atualizar os dados
-Os limites mudam raramente. Para regerar o JSON a partir da PBH:
-```
-pip install -r requirements.txt
-python scripts/generate_data.py
-```
+### Como os dados são gerados
+Os dados **não** são versionados no repositório; eles são gerados no deploy:
+
+1. `scripts/generate_data.py` busca os bairros na PBH e converte UTM → lat/lon,
+   produzindo `docs/data/neighborhoods.json`.
+2. `scripts/build_gpx.py` gera um `docs/data/gpx/<bairro>.gpx` por bairro (consumidos
+   pelo botão "Abrir no gpx.studio").
+
+Ambos os caminhos (`neighborhoods.json` e `gpx/`) estão no `.gitignore`.
 
 ### Publicar no GitHub Pages
-Em **Settings → Pages**, defina a fonte como branch `main` e pasta `/docs`.
+A publicação é feita pelo workflow `.github/workflows/deploy.yml`. Em
+**Settings → Pages**, defina a fonte (*Source*) como **GitHub Actions**. A cada push
+na `main` (e mensalmente, para refrescar os dados) o workflow busca os dados da PBH,
+gera os GPX e publica.
+
+### Pré-visualizar localmente
+Como os dados são gerados no deploy, gere-os antes de servir o site localmente:
+```
+pip install pyproj
+python scripts/generate_data.py
+python scripts/build_gpx.py
+cd docs && python -m http.server 8000
+```
 
 ## Versão desktop (Python/PyQt6)
 
