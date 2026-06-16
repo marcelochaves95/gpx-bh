@@ -35,10 +35,12 @@ def build_gpx(name, polygons):
         '<gpx version="1.1" creator="GPX BH" xmlns="http://www.topografix.com/GPX/1/1">',
         "  <trk>",
         f"    <name>{safe}</name>",
-        "    <trkseg>",
     ]
+    # Each ring (outer boundary or inner hole) is its own segment, otherwise viewers
+    # connect the end of one ring to the start of the next with spurious straight lines.
     for polygon in polygons:
         for ring in polygon:
+            parts.append("    <trkseg>")
             for lng, lat in ring:
                 parts += [
                     f'      <trkpt lat="{lat}" lon="{lng}">',
@@ -46,7 +48,8 @@ def build_gpx(name, polygons):
                     f"        <name>{safe}</name>",
                     "      </trkpt>",
                 ]
-    parts += ["    </trkseg>", "  </trk>", "</gpx>", ""]
+            parts.append("    </trkseg>")
+    parts += ["  </trk>", "</gpx>", ""]
     return "\n".join(parts)
 
 

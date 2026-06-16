@@ -51,11 +51,13 @@ def generate_gpx(selected_neighborhood, coordinates, file_path, elevation=1045.5
     gpx = ET.Element("gpx", version="1.1", creator="GPX BH", xmlns="http://www.topografix.com/GPX/1/1")
     trk = ET.SubElement(gpx, "trk")
     ET.SubElement(trk, "name").text = selected_neighborhood
-    trkseg = ET.SubElement(trk, "trkseg")
 
+    # Each ring (outer boundary or inner hole) is its own segment, otherwise viewers
+    # connect the end of one ring to the start of the next with spurious straight lines.
     for polygon in coordinates:
-        for coord in polygon:
-            for point in coord:
+        for ring in polygon:
+            trkseg = ET.SubElement(trk, "trkseg")
+            for point in ring:
                 longitude, latitude = convert_utm_to_latitude_and_longitude(point[0], point[1])
                 trkpt = ET.SubElement(trkseg, "trkpt", lat=str(latitude), lon=str(longitude))
                 ET.SubElement(trkpt, "ele").text = str(elevation)

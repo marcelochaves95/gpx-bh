@@ -153,10 +153,12 @@ function buildGpx(name, polygons) {
     '<gpx version="1.1" creator="GPX BH" xmlns="http://www.topografix.com/GPX/1/1">',
     "  <trk>",
     `    <name>${safe}</name>`,
-    "    <trkseg>",
   ];
+  // Each ring (outer boundary or inner hole) is its own segment, otherwise viewers
+  // connect the end of one ring to the start of the next with spurious straight lines.
   for (const polygon of polygons) {
     for (const ring of polygon) {
+      parts.push("    <trkseg>");
       for (const [lng, lat] of ring) {
         parts.push(
           `      <trkpt lat="${lat}" lon="${lng}">`,
@@ -165,9 +167,10 @@ function buildGpx(name, polygons) {
           "      </trkpt>"
         );
       }
+      parts.push("    </trkseg>");
     }
   }
-  parts.push("    </trkseg>", "  </trk>", "</gpx>", "");
+  parts.push("  </trk>", "</gpx>", "");
   return parts.join("\n");
 }
 
