@@ -4,6 +4,8 @@
 # Generated at deploy time from the PBH dataset (not committed)
 docs/data/neighborhoods.json
 docs/data/gpx/
+docs/data/streets/
+docs/data/street_lengths.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

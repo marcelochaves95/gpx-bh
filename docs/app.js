@@ -8,12 +8,14 @@ const els = {
   download: document.getElementById("download"),
   openStrava: document.getElementById("open-strava"),
   openStudio: document.getElementById("open-gpxstudio"),
+  downloadStreets: document.getElementById("download-streets"),
   status: document.getElementById("status"),
 };
 
 let neighborhoods = {}; // { name: [ [ [ [lng, lat], ... ] ] ] }  (MultiPolygon)
 let names = [];         // sorted neighborhood names
 let current = null;     // currently selected valid neighborhood name
+let streetLengths = {}; // { name: km } — total street length per neighborhood
 let activeIndex = -1;   // highlighted item in the dropdown
 
 // --- Map ---
@@ -66,8 +68,10 @@ function activate(name) {
   els.download.disabled = false;
   els.openStrava.disabled = false;
   els.openStudio.disabled = false;
+  els.downloadStreets.disabled = false;
   showOnMap(name);
-  setStatus(`Bairro selecionado: ${name}`, "ok");
+  const km = streetLengths[name];
+  setStatus(`Bairro selecionado: ${name}${km != null ? ` · ruas: ${km} km` : ""}`, "ok");
 }
 
 function selectName(name) {
@@ -113,6 +117,7 @@ function onInput() {
     els.download.disabled = true;
     els.openStrava.disabled = true;
     els.openStudio.disabled = true;
+    els.downloadStreets.disabled = true;
     renderList(els.input.value);
     if (!value) setStatus(`${names.length} bairros. Escolha um.`);
   }
@@ -207,6 +212,18 @@ function openInGpxStudio() {
 // the file first (otherwise the user would land on the route builder with nothing
 // to upload) and open the builder for a manual upload. Reuses the tab via a named
 // target.
+// Download the pre-generated GPX with every street of the neighborhood (for the
+// "Every Single Street" challenge) — a static file served from the site.
+function downloadStreets() {
+  if (!current) return;
+  const a = document.createElement("a");
+  a.href = `data/streets/${slug(current)}.gpx`;
+  a.download = `${slug(current)}_ruas.gpx`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
 function openStrava() {
   if (!current) return;
   downloadGpx();
@@ -221,6 +238,11 @@ async function init() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     neighborhoods = await res.json();
     names = Object.keys(neighborhoods);
+
+    try {
+      const sres = await fetch("data/street_lengths.json");
+      if (sres.ok) streetLengths = await sres.json();
+    } catch (_) { /* streets are optional */ }
 
     els.input.disabled = false;
     setStatus(`${names.length} bairros. Escolha um.`);
@@ -241,6 +263,7 @@ async function init() {
     els.download.addEventListener("click", downloadGpx);
     els.openStrava.addEventListener("click", openStrava);
     els.openStudio.addEventListener("click", openInGpxStudio);
+    els.downloadStreets.addEventListener("click", downloadStreets);
   } catch (err) {
     setStatus(`Falha ao carregar os bairros: ${err.message}`, "error");
   }
