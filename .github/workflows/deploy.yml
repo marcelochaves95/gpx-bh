@@ -33,13 +33,30 @@ jobs:
       - name: Install dependencies
         run: pip install pyproj shapely
 
+      # Cache the generated data per month: the first run of a month regenerates
+      # from PBH; later pushes in the same month reuse the cache and skip the
+      # heavy generation steps, so deploys stay fast.
+      - name: Cache month key
+        id: month
+        run: echo "key=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore generated data
+        id: data-cache
+        uses: actions/cache@v4
+        with:
+          path: docs/data
+          key: gpx-data-${{ steps.month.outputs.key }}
+
       - name: Fetch data from PBH
+        if: steps.data-cache.outputs.cache-hit != 'true'
         run: python scripts/generate_data.py
 
       - name: Build GPX files
+        if: steps.data-cache.outputs.cache-hit != 'true'
         run: python scripts/build_gpx.py
 
       - name: Build street GPX
+        if: steps.data-cache.outputs.cache-hit != 'true'
         run: python scripts/build_streets.py
 
       - name: Copy assets into site
