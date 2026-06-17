@@ -1,9 +1,10 @@
-# GPX BH
+<h1><img src="assets/belo-horizonte-flag.png" alt="" height="30"> GPX BH</h1>
+
 Ferramenta para gerar GPX de bairros de Belo Horizonte.
 
-![](assets/bairros.png)
+![](assets/gpx-bh.png)
 
-## Versão web (recomendada)
+## Uso
 App estático (web/mobile) hospedado no GitHub Pages — sem instalação:
 
 **https://marcelochaves95.github.io/gpx-bh**
@@ -33,33 +34,6 @@ Como os dados são gerados no deploy, gere-os antes de servir o site localmente:
 pip install pyproj
 python scripts/generate_data.py
 python scripts/build_gpx.py
+mkdir -p docs/assets && cp assets/* docs/assets/
 cd docs && python -m http.server 8000
 ```
-
-## Versão desktop (Python/PyQt6)
-
-### Instalação
-1. Clone o repositório:
-```
-git clone https://github.com/marcelochaves95/gpx-bh.git
-cd gpx-bh
-```
-2. Instale as dependências necessárias:
-```
-pip install -r requirements.txt
-```
-
-## Uso
-1. Execute o script principal:
-```
-python main.py
-```
-
-2. Siga os passos na interface:
-- Carregue a lista de bairros.
-- Selecione um bairro.
-- Gere e salve o arquivo GPX correspondente.
-
-## Requisitos
-- Python 3.9 ou superior.
-- Dependências listadas em `requirements.txt`.

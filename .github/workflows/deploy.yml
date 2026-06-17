@@ -39,6 +39,9 @@ jobs:
       - name: Build GPX files
         run: python scripts/build_gpx.py
 
+      - name: Copy assets into site
+        run: mkdir -p docs/assets && cp assets/* docs/assets/
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

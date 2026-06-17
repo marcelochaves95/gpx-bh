@@ -42,10 +42,12 @@ def build_gpx(name, polygons):
     for polygon in polygons:
         ring = polygon[0]
         parts.append("    <trkseg>")
-        for lng, lat in ring:
+        for point in ring:
+            lng, lat = point[0], point[1]
+            ele = point[2] if len(point) > 2 else ELEVATION
             parts += [
                 f'      <trkpt lat="{lat}" lon="{lng}">',
-                f"        <ele>{ELEVATION}</ele>",
+                f"        <ele>{ele}</ele>",
                 f"        <name>{safe}</name>",
                 "      </trkpt>",
             ]

@@ -160,10 +160,10 @@ function buildGpx(name, polygons) {
   for (const polygon of polygons) {
     const ring = polygon[0];
     parts.push("    <trkseg>");
-    for (const [lng, lat] of ring) {
+    for (const [lng, lat, ele] of ring) {
       parts.push(
         `      <trkpt lat="${lat}" lon="${lng}">`,
-        `        <ele>${ELEVATION}</ele>`,
+        `        <ele>${ele ?? ELEVATION}</ele>`,
         `        <name>${safe}</name>`,
         "      </trkpt>"
       );
